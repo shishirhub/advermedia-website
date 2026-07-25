@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f7f1e6;
+}
+::-webkit-scrollbar-thumb {
+  background: #cba554;
+  border-radius: 999px;
+}
+
+/* Visible keyboard focus everywhere, on both light and dark sections */
+:focus-visible {
+  outline: 2px solid #dfae3f;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-content px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-widest2 text-stone;
+  }
+
+  .eyebrow-on-dark {
+    @apply font-mono text-[11px] uppercase tracking-widest2 text-stone-light;
+  }
+
+  /* Buttons: same shape, color and copy as before — enhanced with a
+     diagonal light-sweep sheen (pure background-position animation,
+     no extra markup needed) and a richer, longer hover glow. */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gold px-7 py-3.5
+      font-body text-sm font-semibold text-ink transition-all duration-500 ease-cinematic
+      hover:bg-gold-pale hover:-translate-y-0.5
+      hover:shadow-[0_14px_40px_-10px_rgba(223,174,63,0.65)]
+      active:translate-y-0 active:duration-150;
+    background-image: linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 48%,
+      transparent 66%
+    );
+    background-size: 260% 100%;
+    background-position: 150% 0;
+  }
+  .btn-primary:hover {
+    background-position: -60% 0;
+    transition: background-position 900ms ease-cinematic, transform 500ms ease-cinematic,
+      box-shadow 500ms ease-cinematic, background-color 500ms ease-cinematic;
+  }
+
+  .btn-ghost {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-ink/15 bg-transparent px-7 py-3.5
+      font-body text-sm font-semibold text-ink transition-all duration-500 ease-cinematic
+      hover:border-ink/40 hover:-translate-y-0.5 hover:shadow-[0_10px_28px_-14px_rgba(21,19,15,0.35)]
+      active:translate-y-0;
+  }
+
+  .btn-ghost-on-dark {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-cream/25 bg-transparent px-7 py-3.5
+      font-body text-sm font-semibold text-cream transition-all duration-500 ease-cinematic
+      hover:border-gold hover:text-gold hover:-translate-y-0.5
+      hover:shadow-[0_10px_30px_-12px_rgba(223,174,63,0.45)]
+      active:translate-y-0;
+  }
+}
+
+/* Subtle film-grain texture used on dark "manifesto mode" sections.
+   Referenced as a background-image via .grain-overlay */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+/* Fine secondary grain layer — slightly finer frequency, animated very
+   slowly, used together with .grain-overlay for extra cinematic depth
+   on hero / manifesto / contact. */
+.grain-overlay-fine {
+  position: absolute;
+  inset: -10%;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n2'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n2)'/></svg>");
+  background-size: 220px 220px;
+}
+
+/* aperture-style circular reveal used between manifesto-mode and community-mode */
+.aperture-mask {
+  clip-path: circle(var(--r, 0%) at 50% 50%);
+}
+
+/* ---------------------------------------------------------------------
+   Ambient cinematic glow blobs. Reusable, decorative-only layers that
+   sit behind existing content (never affect layout/flow — always
+   absolute + pointer-events-none). Used to add "soft moving golden
+   light" per the polish brief without touching section structure.
+   ------------------------------------------------------------------- */
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(120px);
+  will-change: transform;
+}
+
+/* Diagonal light-sweep sheen for premium cards (Package card, service
+   cards). Applied by adding this class name alongside a card's existing
+   classes — the card itself, its content and copy are untouched. */
+.card-sheen {
+  position: relative;
+  isolation: isolate;
+}
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  z-index: 1;
+  background-image: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(223, 174, 63, 0.16) 42%,
+    rgba(255, 244, 214, 0.22) 50%,
+    rgba(223, 174, 63, 0.16) 58%,
+    transparent 80%
+  );
+  background-size: 220% 220%;
+  background-position: 200% 0%;
+  opacity: 0;
+  transition: opacity 700ms ease-out;
+}
+.card-sheen:hover::before {
+  opacity: 1;
+  animation: card-sheen-sweep 1.8s ease-in-out;
+}
+@keyframes card-sheen-sweep {
+  from {
+    background-position: 200% 0%;
+  }
+  to {
+    background-position: -40% 100%;
+  }
+}
+
+/* Soft breathing gold border glow, used on the package card frame */
+.gold-frame-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: 0 0 0 1px rgba(223, 174, 63, 0.22), 0 0 60px 0 rgba(223, 174, 63, 0.16);
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+
+/* Elegant glass navigation — refined blur + hairline + soft shadow */
+.nav-glass {
+  background: rgba(247, 241, 230, 0.72);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 1px 0 0 rgba(21, 19, 15, 0.07), 0 12px 40px -20px rgba(21, 19, 15, 0.25);
+}
+
+/* Nav link underline-on-hover, added purely as a decorative ::after —
+   no markup change, no change to link text/position. */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: right;
+  background: linear-gradient(90deg, #dfae3f, #f3d488);
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Gentle glow on focused form fields, layered on top of the existing
+   focus:border-gold utility already used in the contact form. */
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 4px rgba(223, 174, 63, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-sheen::before,
+  .gold-frame-glow {
+    animation: none !important;
+  }
+}
