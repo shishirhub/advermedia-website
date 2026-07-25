@@ -76,7 +76,7 @@ export function ParticleField({ count = 34, className = "", color = "223, 174, 6
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       seed();
     }
 
